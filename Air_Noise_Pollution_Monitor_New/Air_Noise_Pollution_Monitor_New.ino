@@ -4,12 +4,12 @@
 
 // Home Network 
 // char ssid[] = "TALKTALKB80B47"; //enter you network SSID (name) here
-char ssid[] = "WiFi-Repeater"; // Network SSID
-char pass[] = "383MDWQJ";    // Network password
+// char ssid[] = "WiFi-Repeater"; // Network SSID
+// char pass[] = "383MDWQJ";    // Network password
 // YSJ Network 
-// char ssid[] = "CS";
+  char ssid[] = "CS";
 // YSJ Network Password 
-// pass[] = "";
+  char pass[] = "";
 
 int AirQuality = A0;  // Pin connected to pin 0 is the MQ135 Gas Sensor
 const int Microphone = A1; // Pin connected to pin 1 Module Sound Sensor   
@@ -27,14 +27,13 @@ void setup() {
   while ( status != WL_CONNECTED) { 
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
-    // Connect to WPA/WPA2 network.
     status = WiFi.begin(ssid, pass);
 
     // wait 5 seconds for connection:
     delay(5000);
   } 
-  server.begin();
-  WifiStatus();
+  server.begin(); // Creates a local server.
+  WifiStatus(); // Prints status of the Wifi.
 }
 
 
@@ -58,27 +57,27 @@ void loop() {
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
           client.println("<meta http-equiv=\"refresh\" content=\"5\">");
-          client.println("<h1>Air & Noise Pollution Monitor</h1>"); 
-          client.println("<h2>Air Pollution Monitor</h2>");
-          AirSensor();
+          client.println("<h1>Air & Noise Pollution Monitor</h1>"); // Main header.
+          client.println("<h2>Air Pollution Monitor</h2>"); // Sub-heading.
+          AirSensor(); // Calling and using the AirSensor class.
           client.println("<h2>Noise Pollution Monitor</h2>");
-          MicSensor();
+          MicSensor(); // Calling and using the MicSensor class.
           client.println("</html>");
           break;
         }
         if (c == '\n') {
-          // you're starting a new line
+          // Starting a new line
           currentLineIsBlank = true;
         } 
         else if (c != '\r') {
-          // you've gotten a character on the current line
+          // Have a character on the current line
           currentLineIsBlank = false;
         }
       }
     }
-    // give the web browser time to receive the data
+    // Give the browser time to receive data
     delay(1);
-      // close the connection:
+      // Close connection:
       client.stop();
       Serial.println("client disonnected");
   }
@@ -86,8 +85,8 @@ void loop() {
 
 void AirSensor()
 {
-  WiFiClient client = server.available();
-  int AirsensorValue = analogRead(A0);
+  WiFiClient client = server.available(); // Creating a WifiClient to allow for posting to a web page.
+  int AirsensorValue = analogRead(A0); // Read from the specified pin.
 
   client.print("Air Quality: ");
 
@@ -138,9 +137,9 @@ if (AirsensorValue > 300)
 void MicSensor()
 {
   WiFiClient client = server.available();
-  pinMode (Microphone, INPUT); // Set the signal pin as input
-  MicsensorValue = analogRead(A1);
-  double db = 20.0 * log10(MicsensorValue / 5.0) ;
+  pinMode (Microphone, INPUT); // Set the pin as input
+  MicsensorValue = analogRead(A1); // Reads the specified pin.
+  double db = 20.0 * log10(MicsensorValue / 5.0) ; // This is what converts the microphone output voltage to Decibels. 
   client.print("Sound level: ");
   client.print(db);
   client.println("dB");
