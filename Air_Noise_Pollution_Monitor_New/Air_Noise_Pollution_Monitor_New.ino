@@ -9,7 +9,7 @@
 // YSJ Network 
   char ssid[] = "CS";
 // YSJ Network Password 
-  char pass[] = "";
+  char pass[] = "oPh2Vu2u";
 
 int AirQuality = A0;  // Pin connected to pin 0 is the MQ135 Gas Sensor
 const int Microphone = A1; // Pin connected to pin 1 Module Sound Sensor   
